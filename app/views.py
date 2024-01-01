@@ -84,27 +84,27 @@ class UserLoginView(generics.CreateAPIView):
 class UserUpdateView(generics.UpdateAPIView):
     queryset = User.objects.all()
     
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 class ProductCategoryUpdateView(generics.UpdateAPIView):
     queryset = ProductCategory.objects.all()
     serializer_class = ProductCategorySerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 class SubCategoryUpdateView(generics.UpdateAPIView):
     queryset = SubCategory.objects.all()
     serializer_class = SubCategorySerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 class ColorUpdateView(generics.UpdateAPIView):
     queryset = Color.objects.all()
     serializer_class = ColorSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 class ProductUpdateView(generics.UpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
@@ -113,40 +113,40 @@ class UserListView(generics.ListAPIView):
 
 class UserDetailView(generics.RetrieveAPIView):
     queryset = User.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 
 class UserUpdateView(generics.UpdateAPIView):
     queryset = User.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.]
 
 
 class UserDeleteView(generics.DestroyAPIView):
     queryset = User.objects.all()
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 
 # ProductCategory views
 class ProductCategoryListView(generics.ListCreateAPIView):
     queryset = ProductCategory.objects.all()
     serializer_class = ProductCategorySerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 class ProductCategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = ProductCategory.objects.all()
     serializer_class = ProductCategorySerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 class ProductCategoryUpdateView(generics.UpdateAPIView):
     queryset = ProductCategory.objects.all()
     serializer_class = ProductCategorySerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 class ProductCategoryDeleteView(generics.DestroyAPIView):
     queryset = ProductCategory.objects.all()
     serializer_class = ProductCategorySerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 
 
@@ -172,17 +172,17 @@ class ProductListView(generics.ListCreateAPIView):
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 class ProductUpdateView(generics.UpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 class ProductDeleteView(generics.DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 
 
@@ -205,7 +205,7 @@ class ProductDeleteView(generics.DestroyAPIView):
 class SubCategoryListView(generics.ListCreateAPIView):
     queryset = SubCategory.objects.all()
     serializer_class = SubCategorySerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def perform_create(self, serializer):
         # Set the created_by and updated_by fields before saving a new instance
@@ -222,7 +222,7 @@ class SubCategoryListView(generics.ListCreateAPIView):
 class SubCategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = SubCategory.objects.all()
     serializer_class = SubCategorySerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def perform_update(self, serializer):
         # Set the updated_by field before updating an instance
@@ -237,7 +237,7 @@ class SubCategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 class SubCategoryDeleteView(generics.DestroyAPIView):
     queryset = SubCategory.objects.all()
     serializer_class = SubCategorySerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def perform_destroy(self, instance):
         # Soft delete by setting is_active to False
@@ -248,7 +248,7 @@ class ColorListView(generics.ListCreateAPIView):
     
     queryset = Color.objects.filter(is_active=True)
     serializer_class = ColorSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def perform_create(self, serializer):
         # Set the created_by and updated_by fields
@@ -256,12 +256,12 @@ class ColorListView(generics.ListCreateAPIView):
 class ColorDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Color.objects.all()
     serializer_class = ColorSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 class ColorDeleteView(generics.DestroyAPIView):
     queryset = Color.objects.all()
     serializer_class = ColorSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 class TopCategoriesView(APIView):
     def get(self, request, *args, **kwargs):
@@ -322,13 +322,13 @@ class ProductListView(ListAPIView):
     pagination_class = ProductListPagination
 
 # app/views.py
-from rest_framework.permissions import IsAuthenticated
+
 from app.permissions import IsAdminUserOrReadOnly
 
 class ProductDetailView(RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated, IsAdminUserOrReadOnly]
+    permission_classes = [permissions.AllowAny]
 
 
 
