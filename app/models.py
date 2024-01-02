@@ -3,9 +3,7 @@ from django.db import models
 from accounts.models import CustomUser
 from django.contrib.auth import get_user_model
 from django.db import models
-
-
-
+from django.utils import timezone
 
 class ProductCategory(models.Model):
     name = models.CharField(max_length=100)
@@ -24,10 +22,13 @@ class SubCategory(models.Model):
     image = models.ImageField(upload_to='subcategory_images/', null=True, blank=True)
     description = models.TextField()
     is_active = models.BooleanField(default=True)
-    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='subcategories_created')
-    updated_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='subcategories_updated')
+    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='subcategories_created', null=True, blank=True)
+    updated_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='subcategories_updated', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.name
 
 class Color(models.Model):
     name = models.CharField(max_length=50)
@@ -37,45 +38,37 @@ class Color(models.Model):
     def __str__(self):
         return self.name
 
-class Product(models.Model):
-    
-    title = models.CharField(max_length=100)
-    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='products')
-    # category = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
-    description = models.TextField()
-    sku = models.CharField(max_length=50, unique=True)
-    is_active = models.BooleanField(default=True)
-    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='products_uploaded')
-    updated_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='products_updated')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    colors = models.ManyToManyField(Color)
-
-    def save(self, *args, **kwargs):
-        # Generate SKU before saving
-        if not self.sku:
-            self.sku = f"prod-{self.created_at.strftime('%Y%m%d')}-{self.id}"
-        super().save(*args, **kwargs)
-
-
-
-
 class SoftDeletionManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_deleted=False)
 
 class Product(models.Model):
-    name = models.CharField(max_length=255, default="Unknown")
+    title = models.CharField(max_length=100)
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='products', default=None)
     description = models.TextField()
+    sku = models.CharField(max_length=50, unique=True)
+    is_active = models.BooleanField(default=True)
+    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='products_uploaded')
+    updated_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='products_updated')
+    created_at = models.DateTimeField()
+    updated_at = models.DateTimeField()    
+    colors = models.ManyToManyField(Color)
     is_deleted = models.BooleanField(default=False)
+    
+    # Soft Deletion Manager
     objects = SoftDeletionManager()
 
     def delete(self, using=None, keep_parents=False):
         self.is_deleted = True
         self.save()
 
+    def save(self, *args, **kwargs):
+        if not self.sku:
+            self.sku = f"prod-{self.created_at.strftime('%Y%m%d')}-{self.id}"
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return self.product_name
+        return self.title
 
     # Other fields...
 

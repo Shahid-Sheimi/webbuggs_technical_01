@@ -4,15 +4,16 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.conf import settings
-
+from rest_framework.generics import CreateAPIView
 from .serializers import UserLoginSerializer, UserSerializer
 
 CustomUser = get_user_model()
 
-class UserSignupView(generics.CreateAPIView):
+class UserSignupView(CreateAPIView):
     queryset = CustomUser.objects.all()
-    
-    permission_classes = []
+    serializer_class = UserSerializer  # Set the serializer class
+
+    permission_classes = []  # Assuming you have your permission logic here
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -54,14 +55,14 @@ class UserListView(generics.ListAPIView):
 class UserDetailView(generics.RetrieveAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 class UserUpdateView(generics.UpdateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 class UserDeleteView(generics.DestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]

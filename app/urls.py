@@ -1,7 +1,5 @@
 from django.urls import path
 from .views import (
-    
-    
     ProductCategoryListView, ProductCategoryDetailView, ProductCategoryUpdateView, ProductCategoryDeleteView,
     SubCategoryListView, SubCategoryDetailView, SubCategoryUpdateView, SubCategoryDeleteView,
     ColorListView, ColorDetailView, ColorUpdateView, ColorDeleteView,ProductFilterView,UserProductInfoView,
@@ -33,8 +31,4 @@ urlpatterns = [
     path('top-categories/', TopCategoriesView.as_view(), name='top-categories'),
     path('product-filter/', ProductFilterView.as_view(), name='product-filter'),
     path('user-info/<int:pk>/', UserProductInfoView.as_view(), name='user-info'),
-    
-    
-    
-
 ]
