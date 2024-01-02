@@ -31,23 +31,7 @@ class Color(models.Model):
     is_active = models.BooleanField(default=True)  # Add this line
     def __str__(self):
         return self.name
-class Product(models.Model): 
-    title = models.CharField(max_length=100)
-    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='products')
-    # category = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
-    description = models.TextField()
-    sku = models.CharField(max_length=50, unique=True)
-    is_active = models.BooleanField(default=True)
-    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='products_uploaded')
-    updated_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='products_updated')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    colors = models.ManyToManyField(Color)
-    def save(self, *args, **kwargs):
-        # Generate SKU before saving
-        if not self.sku:
-            self.sku = f"prod-{self.created_at.strftime('%Y%m%d')}-{self.id}"
-        super().save(*args, **kwargs)
+
 class SoftDeletionManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_deleted=False)
