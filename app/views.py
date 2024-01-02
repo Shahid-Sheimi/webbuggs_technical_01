@@ -30,39 +30,7 @@ class TopCategoriesView(APIView):
         # Serialize the result
         serializer = ProductCategorySerializer(top_categories, many=True)
         return Response(serializer.data)
-User = get_user_model()
-class UserSignupView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    permission_classes = []
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        # Send welcome email
-        user_email = serializer.validated_data['email']
-        welcome_subject = 'Welcome to My App'
-        welcome_message = f'Thank you for signing up on My App, {user_email}!'
-        send_mail(welcome_subject, welcome_message, settings.DEFAULT_FROM_EMAIL, [user_email])
-        headers = self.get_success_headers(serializer.data)
-        return Response({'message': 'User created successfully. Check your email for the welcome message.'},
-                        status=status.HTTP_201_CREATED, headers=headers)
-class UserLoginView(generics.CreateAPIView):
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        email = serializer.validated_data['email']
-        password = serializer.validated_data['password']
-        user = User.objects.filter(email=email).first()
-        if user and user.check_password(password):
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key}, status=status.HTTP_200_OK)
-        return Response({'non_field_errors': ['Invalid credentials', 'Please check your email and password.']}, status=status.HTTP_401_UNAUTHORIZED)
-        
-# Add other views following a similar pattern
-class UserUpdateView(generics.UpdateAPIView):
-    queryset = User.objects.all()
-    permission_classes = [permissions.AllowAny]
-    
+
 class ProductCategoryUpdateView(generics.UpdateAPIView):
     queryset = ProductCategory.objects.all()
     serializer_class = ProductCategorySerializer
@@ -81,24 +49,6 @@ class ColorUpdateView(generics.UpdateAPIView):
 class ProductUpdateView(generics.UpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.AllowAny]
-
-class UserListView(generics.ListAPIView):
-    queryset = User.objects.all()
-    # permission_classes = [permissions.IsAuthenticated]
-
-class UserDetailView(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    permission_classes = [permissions.AllowAny]
-
-
-class UserUpdateView(generics.UpdateAPIView):
-    queryset = User.objects.all()
-    permission_classes = [permissions.]
-
-
-class UserDeleteView(generics.DestroyAPIView):
-    queryset = User.objects.all()
     permission_classes = [permissions.AllowAny]
 
 # ProductCategory views
